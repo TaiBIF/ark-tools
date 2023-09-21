@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  flask:
+    build:
+      dockerfile: ./docker/Dockerfile_prod
+    expose:
+      - 8001
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - flask
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+      - ../arktools-volumes/certbot/conf:/etc/letsencrypt
+      - ../arktools-volumes/certbot/www:/var/www/certbot
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ../arktools-volumes/certbot/conf:/etc/letsencrypt
+      - ../arktools-volumes/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

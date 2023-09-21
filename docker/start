@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+#npm run build-dev
+
+#python manage.py migrate --delete-ghost-migrations
+#python manage.py migrate
+#python manage.py qcluster & python manage.py runserver 0.0.0.0:8000
+
+#flask migrate
+
+if [ "$WEB_ENV" == "dev" ]; then
+    flask run --host 0.0.0.0
+else
+    gunicorn --bind 0.0.0.0:8001 wsgi:app
+fi
