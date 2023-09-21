@@ -1,7 +1,7 @@
 # ark-tools
 A simple ark resolver for pid.biodiv.tw
 
-[internetarchive/arklet: ARK minter, binder, resolver](https://github.com/internetarchive/arklet)
+Inspired from [internetarchive/arklet: ARK minter, binder, resolver](https://github.com/internetarchive/arklet)
 
 ## What is an ARK?
 See https://arks.org/
