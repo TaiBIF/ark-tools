@@ -42,34 +42,35 @@ def parse_ark(identifier):
         raise ValueError('Not a valid ARK')
 
     naan, assigned_name = parts[:2]
+    suffix = identifier[len(naan)+len(assigned_name)+1:]
 
     try:
         naan_int = int(naan)
     except ValueError:
         raise ValueError('ARK NAAN must be an integer')
 
-    return naan, assigned_name
+    return naan, assigned_name, suffix
 
 
 @flask_app.route('/ark:/<path:identifier>')
 def resolver(identifier):
 
+    suffix = ''
     try:
-        naan, assigned_name = parse_ark(identifier)
+        naan, assigned_name, suffix = parse_ark(identifier)
     except ValueError as e:
         return abort(400)
 
-    if ark_obj := session.get(Ark, identifier):
-        if not ark_obj.url:
-            raise abort(404)
-        return redirect(ark_obj.url)
+    #print(identifier, assigned_name, suffix, flush=True)
+    #basic_object_name = f'ark:/{naan}/{assigned_name}'
+    if ark_obj := session.get(Ark, f'{naan}/{assigned_name}'):
+        if ark_obj.url:
+            return redirect(f'https://{ark_obj.url}{suffix}')
     else:
-        if naan_obj := session.get(Naan, naan):
-            url = f'{naan_obj.url}/ark:/{naan_obj.naan}/{assigned_name}'
-            return redirect(f'{naan_obj.url}/ark:/{naan_obj.naan}/{assigned_name}')
-        else:
-            url = f'https://n2t.net/ark:/{naan}/{assigned_name}'
-            return redirect(url)
+        url = f'https://n2t.net/ark:/{naan}/{assigned_name}'
+        return redirect(url)
+
+    return abort(404)
 
 
 @flask_app.teardown_appcontext
