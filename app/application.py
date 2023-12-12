@@ -65,7 +65,7 @@ def resolver(identifier):
     #basic_object_name = f'ark:/{naan}/{assigned_name}'
     if ark_obj := session.get(Ark, f'{naan}/{assigned_name}'):
         if ark_obj.url:
-            return redirect(f'https://{ark_obj.url}{suffix}')
+            return redirect(f'{ark_obj.url}{suffix}')
     else:
         url = f'https://n2t.net/ark:/{naan}/{assigned_name}'
         return redirect(url)
