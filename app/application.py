@@ -64,8 +64,7 @@ def resolver(identifier):
     res = cur.execute(f"SELECT * FROM ark WHERE identifier = '{naan}/{assigned_name}'")
     if row := res.fetchone():
         if url := row[4]:
-            #return redirect(f'{url}{suffix}')
-            return ''
+            return redirect(f'{url}{suffix}')
 
     con.close()
 
