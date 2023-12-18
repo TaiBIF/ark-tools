@@ -10,13 +10,16 @@ RUN apt-get update \
 
 WORKDIR /code
 
+#COPY --from=node
+#flask static
+
 ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY requirements requirements
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements/prod.txt
+RUN pip install --no-cache-dir -r requirements/upgrade.txt
 
 #ENTRYPOINT ["python"]
 #CMD ["app.py"]
@@ -33,8 +36,5 @@ ENV FLASK_APP=wsgi.py
 ENV FLASK_DEBUG=1
 ENV FLASK_ENV=development
 
-#CMD ["/root/.local/bin/flask", "run", "--host", "0.0.0.0"]
+ENTRYPOINT ["flask", "run", "--host", "0.0.0.0"]
 
-#ENTRYPOINT ["/srv/entrypoint"]
-
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8001", "wsgi:app"]

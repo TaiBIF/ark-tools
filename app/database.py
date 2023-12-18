@@ -39,7 +39,8 @@ Base = declarative_base()
 #def init_db(config):
     #print(config, flush=True)
 #engine = create_engine(config['DATABASE_URI'])
-engine = create_engine('postgresql+psycopg2://postgres:example@postgres:5432/ark') #TODO
+engine = create_engine('sqlite:///foo.db') #TODO
+
 session = scoped_session(sessionmaker(autocommit=False,
                                       autoflush=False,
                                       bind=engine))

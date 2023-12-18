@@ -7,12 +7,12 @@ from flask import (
     abort,
 )
 
-from app.database import session
-from app.models import (
-    Ark,
-    Naan,
-)
-
+# from app.database import session
+# from app.models import (
+#     Ark,
+#     Naan,
+# )
+import sqlite3
 
 def create_app():
     app = Flask(__name__)
@@ -30,11 +30,9 @@ def create_app():
 
 flask_app = create_app()
 
-#apply_blueprints(flask_app)
-
 @flask_app.route('/')
 def index():
-    return 'index'
+    return 'pid'
 
 def parse_ark(identifier):
     parts = identifier.split('/')
@@ -61,22 +59,35 @@ def resolver(identifier):
     except ValueError as e:
         return abort(400)
 
-    #print(identifier, assigned_name, suffix, flush=True)
+    con = sqlite3.connect('ark.db')
+    cur = con.cursor()
+    res = cur.execute(f"SELECT * FROM ark WHERE identifier = '{naan}/{assigned_name}'")
+    if row := res.fetchone():
+        if url := row[4]:
+            #return redirect(f'{url}{suffix}')
+            return ''
+
+    con.close()
+
+    #print(identifier, assigned_name, suffix, naan,flush=True)
     #basic_object_name = f'ark:/{naan}/{assigned_name}'
-    if ark_obj := session.get(Ark, f'{naan}/{assigned_name}'):
-        if ark_obj.url:
-            return redirect(f'{ark_obj.url}{suffix}')
-    else:
-        url = f'https://n2t.net/ark:/{naan}/{assigned_name}'
-        return redirect(url)
+    #if ark_obj := session.get(Ark, f'{naan}/{assigned_name}'):
+    #    print(ark_obj.identifier, ark_obj, flush=True)
+    #    print(ark_obj.url, ark_obj.identifier, ark_obj.url, flush=True)
+    #    if ark_obj.url:
+            #print(ark_obj.url, 'xxx',flush=True)
+            #return redirect(f'{ark_obj.url}{suffix}')
+    #else:
+    #    url = f'https://n2t.net/ark:/{naan}/{assigned_name}'
+    #    return redirect(url)
 
     return abort(404)
 
 
-@flask_app.teardown_appcontext
-def shutdown_session(exception=None):
-    # SQLAlchemy won`t close connection, will occupy pool
-    session.remove()
+#@flask_app.teardown_appcontext
+#def shutdown_session(exception=None):
+#    # SQLAlchemy won`t close connection, will occupy pool
+#    session.remove()
 
 #with flask_app.app_context():
     # needed to make CLI commands work

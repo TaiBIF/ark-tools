@@ -3,6 +3,10 @@ A simple ark resolver for pid.biodiv.tw
 
 Inspired from [internetarchive/arklet: ARK minter, binder, resolver](https://github.com/internetarchive/arklet)
 
+## Depends
+
+Flask, SQLite3
+
 ## What is an ARK?
 See https://arks.org/
 

@@ -1,0 +1,5 @@
+# Flask
+Flask
+
+# environments
+python-dotenv

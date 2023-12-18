@@ -24,13 +24,13 @@ RUN pip install --no-cache-dir -r requirements/base.txt
 #ENTRYPOINT ["python"]
 #CMD ["app.py"]
 
-COPY ./docker/entrypoint /srv/entrypoint
-RUN sed -i 's/\r$//g' /srv/entrypoint
-RUN chmod +x /srv/entrypoint
+#COPY ./docker/entrypoint /srv/entrypoint
+#RUN sed -i 's/\r$//g' /srv/entrypoint
+#RUN chmod +x /srv/entrypoint
 
-COPY ./docker/start /srv/start
-RUN sed -i 's/\r$//g' /srv/start
-RUN chmod +x /srv/start
+#COPY ./docker/start /srv/start
+#RUN sed -i 's/\r$//g' /srv/start
+#RUN chmod +x /srv/start
 
 ENV FLASK_APP=wsgi.py
 ENV FLASK_DEBUG=1
@@ -38,4 +38,5 @@ ENV FLASK_ENV=development
 
 # CMD ["/root/.local/bin/flask", "run", "--host", "0.0.0.0"]
 
-ENTRYPOINT ["/srv/entrypoint"]
+#ENTRYPOINT ["/srv/start"]
+ENTRYPOINT ["flask", "run", "--host", "0.0.0.0"]
