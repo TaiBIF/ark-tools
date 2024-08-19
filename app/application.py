@@ -52,12 +52,13 @@ def parse_ark(identifier):
 
 @flask_app.route('/ark:/<path:identifier>')
 def resolver(identifier):
-
     suffix = ''
     try:
         naan, assigned_name, suffix = parse_ark(identifier)
     except ValueError as e:
         return abort(400)
+
+    #print(identifier, naan, assigned_name, suffix, flush=True)
 
     con = sqlite3.connect('ark.db')
     cur = con.cursor()
@@ -66,9 +67,18 @@ def resolver(identifier):
         if url := row[4]:
             return redirect(f'{url}{suffix}')
 
+    # not match object, try shoulder, redirect
+    # shoulder can be 2 or 3 char
+    shoulder2 = assigned_name[:2]
+    shoulder3 = assigned_name[:3]
+    res = cur.execute(f"SELECT * FROM shoulder WHERE naan = '{naan}' AND (shoulder = '{shoulder3}' OR shoulder = '{shoulder2}')")
+    if row := res.fetchone():
+        if url := row[4]:
+            target_name = assigned_name[len(row[0]):]
+            return redirect(f'{url}{target_name}')
+
     con.close()
 
-    #print(identifier, assigned_name, suffix, naan,flush=True)
     #basic_object_name = f'ark:/{naan}/{assigned_name}'
     #if ark_obj := session.get(Ark, f'{naan}/{assigned_name}'):
     #    print(ark_obj.identifier, ark_obj, flush=True)

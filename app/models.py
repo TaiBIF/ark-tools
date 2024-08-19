@@ -47,3 +47,4 @@ class Shoulder(Base, TimestampMixin):
     naan = Column(Integer, ForeignKey('naan.naan'))
     name = Column(String(500))
     description = Column(Text)
+    redirect_prefix = Column(String(1000))
