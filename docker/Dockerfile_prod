@@ -30,11 +30,12 @@ RUN pip install --no-cache-dir -r requirements/prod.txt
 #RUN chmod +x /srv/start
 
 ENV FLASK_APP=wsgi.py
-ENV FLASK_DEBUG=1
-ENV FLASK_ENV=development
+ENV FLASK_DEBUG=0
+ENV FLASK_ENV=production
 
-#CMD ["/root/.local/bin/flask", "run", "--host", "0.0.0.0"]
+# Create log directory for gunicorn access logs
+RUN mkdir -p /var/log/gunicorn
 
-#ENTRYPOINT ["/srv/entrypoint"]
+COPY gunicorn_conf.py /code/gunicorn_conf.py
 
-ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8001", "wsgi:app"]
+ENTRYPOINT ["gunicorn", "-c", "gunicorn_conf.py", "wsgi:app"]

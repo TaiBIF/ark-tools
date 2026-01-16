@@ -6,6 +6,10 @@ services:
       dockerfile: ./docker/Dockerfile_prod
     expose:
       - 8001
+    environment:
+      - LOG_TO_FILE=1
+    volumes:
+      - ../arktools-volumes/logs/gunicorn:/var/log/gunicorn
 
   nginx:
     image: nginx:alpine
@@ -19,6 +23,7 @@ services:
       - ./docker/nginx:/etc/nginx/conf.d
       - ../arktools-volumes/certbot/conf:/etc/letsencrypt
       - ../arktools-volumes/certbot/www:/var/www/certbot
+      - ../arktools-volumes/logs/nginx:/var/log/nginx
   certbot:
     image: certbot/certbot
     volumes:
