@@ -2,4 +2,5 @@
 # WEB_ENV: dev|prod
 WEB_ENV=dev
 SECRET_KEY=mysecret
+MINTER_API_KEY=your-api-key-here
 

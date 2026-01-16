@@ -12,9 +12,11 @@ class Config(object):
 
 class ProductionConfig(Config):
     SECRET_KEY = os.getenv('SECRET_KEY')
+    MINTER_API_KEY = os.getenv('MINTER_API_KEY')
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    MINTER_API_KEY = os.getenv('MINTER_API_KEY', 'dev-api-key')
 
 class TestingConfig(Config):
     TESTING = True

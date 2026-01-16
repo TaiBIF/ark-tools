@@ -48,3 +48,4 @@ class Shoulder(Base, TimestampMixin):
     name = Column(String(500))
     description = Column(Text)
     redirect_prefix = Column(String(1000))
+    template = Column(String(50), default='.reedede')
