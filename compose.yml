@@ -12,10 +12,10 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
       args:
-        PYTHON_VERSION: ${DOCKER_PYTHON_VERSION}
-        DEBIAN_RELEASE: ${DOCKER_DEBIAN_RELEASE}
-    image: ${DOCKER_NAME}-flask-${WEB_ENV}-image
-    container_name: ${DOCKER_NAME}-flask-${WEB_ENV}-container
+        PYTHON_VERSION: 3.12
+        DEBIAN_RELEASE: bookworm
+    image: arktools-flask-${WEB_ENV}-image
+    container_name: arktools-flask-${WEB_ENV}-container
 
     environment:
       - FLASK_APP=app
