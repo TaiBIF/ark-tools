@@ -44,6 +44,20 @@ def index():
     return 'pid'
 
 
+@flask_app.route('/health')
+def health():
+    """Health check endpoint for load balancers and monitoring."""
+    try:
+        # Check database connection
+        con = sqlite3.connect('ark.db')
+        cur = con.cursor()
+        cur.execute('SELECT 1')
+        con.close()
+        return jsonify({'status': 'healthy'}), 200
+    except Exception as e:
+        return jsonify({'status': 'unhealthy', 'error': str(e)}), 503
+
+
 def require_api_key(f):
     @functools.wraps(f)
     def decorated(*args, **kwargs):
