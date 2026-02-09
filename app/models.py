@@ -20,7 +20,7 @@ from app.database import (
 )
 
 
-class Ark(Base):
+class Ark(Base, TimestampMixin):
     __tablename__ = 'ark'
 
     identifier = Column(String(100), primary_key=True, autoincrement=False) # {naan}/{shoulder}{assigned_name}

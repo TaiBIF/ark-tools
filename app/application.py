@@ -2,6 +2,7 @@ import os
 
 import secrets
 import functools
+from datetime import datetime
 
 from flask import (
     g,
@@ -187,7 +188,7 @@ def mint():
         return jsonify({'error': f'Shoulder {shoulder} not found for NAAN {naan}'}), 404
 
     # priority: request template > shoulder template > default
-    shoulder_template = shoulder_row[5] if shoulder_row[5] else '.reedede'
+    shoulder_template = shoulder_row[5] if shoulder_row[5] else '.reedeedk'
     template = data.get('template', shoulder_template)
 
     try:
@@ -210,9 +211,10 @@ def mint():
         return jsonify({'error': 'Failed to generate unique identifier'}), 500
 
     # insert new ARK
+    now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     cur.execute(
-        'INSERT INTO ark (identifier, naan, assigned_name, shoulder, url, who, what, "when") VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        (identifier, naan, assigned_name, shoulder, url, who, what, when)
+        'INSERT INTO ark (identifier, naan, assigned_name, shoulder, url, who, what, "when", created, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        (identifier, naan, assigned_name, shoulder, url, who, what, when, now, now)
     )
     con.commit()
     con.close()

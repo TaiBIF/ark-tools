@@ -20,6 +20,8 @@ CREATE TABLE ark (
   shoulder TEXT,
   url TEXT,
   meta TEXT,
+  created DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (naan) REFERENCES naan(naan),
   FOREIGN KEY (shoulder) REFERENCES shoulder(shoulder)
 );
