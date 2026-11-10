@@ -12,6 +12,8 @@ services:
   nginx:
     image: nginx:alpine
     restart: always
+    # reload every 6h so certs renewed by the certbot service get picked up
+    command: /bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & exec nginx -g "daemon off;"'
     ports:
       - 80:80
       - 443:443
